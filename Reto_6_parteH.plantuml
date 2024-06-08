@@ -1,0 +1,15 @@
+@startuml Reto 6 parte H
+object "Registro : Registro" as R1{
+    - Catalogo
+    - Venta
+} 
+object "VentaProducto: Venta" as V1{
+    - Date
+    - List
+}
+
+R1 --> R1 : 1 IntroducirArticulo (id,cant)
+R1 --> V1 : 1.1 CrearVenta (espec,cant)
+V1 --> V1 : 1.3 Añadir (Lineaventa(espec,cant))
+
+@enduml

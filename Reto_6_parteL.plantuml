@@ -1,0 +1,85 @@
+@startuml Reto 6 parte L
+
+[*] --> Encargar_Producto : Encargar
+
+state c1 <<choice>>
+state bifurcacion1 <<fork>>
+state bifurcacion2 <<fork>>
+state bifurcacion3 <<fork>>
+state join1 <<join>>
+state join2 <<join>>
+state join3 <<start>>
+
+Encargar_Producto : enty/Encargar
+Encargar_Producto : do/Escargar los productos
+Encargar_Producto : exit/Pedido terminado
+
+Encargar_Producto --> bifurcacion1 : Pedido hecho
+bifurcacion1 --> Pagar : Pago del pedido
+
+Pagar : enty/Pedido terminado
+Pagar : do/Hacer el pago
+Pagar : exit/Pagar por adenlatado
+
+bifurcacion1 --> Validar_Pedido : Pedido [colocado]
+Validar_Pedido : enty/Pedido terminado
+Validar_Pedido : do/Validar los productos
+Validar_Pedido : exit/Cobrar productos
+
+Validar_Pedido --> Cobrar_Pago : Cobrar el pedido
+Cobrar_Pago : enty/ Cobrar productos
+Cobrar_Pago : do/Pedir el metodo
+Cobrar_Pago : exit/Pago por adenlatado
+
+Pagar-->join1 : Pedido [Por adelantado]
+Cobrar_Pago-->join1 : Pedido [Por adelantado]
+
+join1 -->Obtener_Producto
+Obtener_Producto : enty/Pago por adelantado
+Obtener_Producto : do/Se obtiene el producto
+Obtener_Producto : exit/Enviar producto
+
+Obtener_Producto --> c1
+c1 --> Envio_Urgente : Enviar[Urgente = si]
+Envio_Urgente : enty/Enviar producto
+Envio_Urgente : do/Enviar producto lo mas rapido
+Envio_Urgente : exit/Recibir producto
+
+c1 --> Envio_Ordinario : Enviar [Urgente = no]
+Envio_Ordinario : enty/Enviar producto
+Envio_Ordinario : do/Enviar producto a el tiempo pautado
+Envio_Ordinario : exit/Recibir producto
+
+Envio_Ordinario --> bifurcacion2
+Envio_Urgente --> bifurcacion2
+
+bifurcacion2 --> Recibir_Producto : Pedido[Realizado]
+Recibir_Producto : enty/Recibir productos
+Recibir_Producto : do/Recibe los productos del pedido
+Recibir_Producto : exit/Terminar
+
+Recibir_Producto --> [*] : Terminar
+
+Cobrar_Pago --> join3 : valorar
+bifurcacion2 --> join3 : valorar
+
+join3 --> Valoracion
+Valoracion : enty/Recibir producto
+Valoracion : do/Dar cervesas
+Valoracion : exit/Paso Final
+
+Valoracion --> bifurcacion3
+bifurcacion3 --> Añadir
+Añadir : enty/Paso Final
+Añadir : do/ Añadir cliente a lista de satisfecho
+Añadir : exit/ Terminar
+bifurcacion3 --> Recibir_Recibo
+Recibir_Recibo : enty/Paso Final
+Recibir_Recibo : do/Dar el recibo de compra
+Recibir_Recibo : exit Terminar
+
+Añadir --> join2
+Recibir_Recibo --> join2
+join2 --> [*] : Terminar
+
+@enduml
